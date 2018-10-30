@@ -89,10 +89,6 @@ $ mkdir -p $HOME/.local/bin && echo "export PATH=$PATH:$HOME/.local/bin" >> ~/.b
 ```bash 
 $ ln -sf "/path/to/ly.py" "$HOME/.local/bin/ly"`
 ```
-
-### Approach NaN
-`ly.py` could as well be renamed `ly` all together and be used with any approach.
-
 ### Result
 
 Regardless of the chosen approach, `ly.py` can be executed as
@@ -101,5 +97,32 @@ Regardless of the chosen approach, `ly.py` can be executed as
 $ ly song_title
 ```
 
+### [lyf](https://github.com/tati-z/.dotfiles/blob/9095247f54d12280a3118600d65598ee78191ab9/.alias#L62)
+
+Lyf helpes ly.py only outputs 15 lines of the lyrics test starting 3 lines above occurence of $keyword then 12 lines away if available.
+
+e.g: here the keyword **beautiful** is used.
+
+```bash
+$ lyf beautiful black pearl
+```
+
+#### results
+
+```bash
+
+Uh huh... uh huh... ooh...
+
+I know someday you'll have a beautiful life,
+I know you'll be a star in somebody else's sky,
+But why, why, why can't it be, can't it be mine?
+
+Aah... uuh..
+
+Too doo doo too, too doo doo [many times until fade]
+
+
+```
+
 ## How ly.py works
-<span style="color:#77d077"><i>is typing...</i></span>
+_is typing..._
