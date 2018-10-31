@@ -4,6 +4,7 @@ import urllib.parse
 from bs4 import BeautifulSoup,SoupStrainer
 
 def get_lyrics(url):
+	print(url)
 	try:
 		response = urllib.request.urlopen(url).read()
 		soup = BeautifulSoup(response, 'html.parser')
@@ -29,7 +30,7 @@ if __name__ == '__main__':
 			print('Usage: '+ sys.argv[0]+' song title', file= sys.stderr)
 		else:
 			# get the first 7 links from DuckDuckGo search engine.
-			res = urllib.request.urlopen('https://duckduckgo.com/html/?q='+'+'.join(sys.argv[1:])+'+lyrics').read()
+			res = urllib.request.urlopen('https://duckduckgo.com/html/?q='+'+'.join(sys.argv[1:])+'+lyrics azlyrics').read()
 			soup = BeautifulSoup(res,'html.parser', parse_only=SoupStrainer('a',{'class': 'result__snippet'}))
 			results = soup.find_all('a', limit=7)
 			
@@ -37,8 +38,9 @@ if __name__ == '__main__':
 			url = None
 			for tag in results:
 				parsed = urllib.parse.urlparse(tag['href'])
-				url = urllib.parse.parse_qs(parsed.query)['uddg'][0]
-				if url.startswith('https://www.azlyrics.com'):
+				temp = urllib.parse.parse_qs(parsed.query)['uddg'][0]
+				if temp.startswith('https://www.azlyrics.com/lyrics'):
+					url = temp
 					break
 			if url:
 				print(get_lyrics(url))

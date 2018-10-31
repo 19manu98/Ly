@@ -28,12 +28,12 @@ $ python3 /path/to/ly.py song_tile
 
 `NS`: Not Started,`S`: Started, `W`: Works/Workaround, `WAA`: Works As intended, `B`: Broken.
 
-| Name                                                                          | NS     | S   | W   | WAA | B |   |
-|:------------------------------------------------------------------------------|:------:|:---:|-----|:---:|:-:|---|
-| Output the lyrics of given song title                                         |        |     |     | [X] |   |   |
-| Error tolerance in title name                                                 |        |     |     | [X] |   |   |
-| Only display the text surrounding a specific keyword                          |        |     | [X] |     |   |   |
-| Search the lyrics elsewhere on 404                                            | [X]    |     |     |     |   |   |
+| Name                                                                          | NS     | S   | W   | WAA | B |
+|:------------------------------------------------------------------------------|:------:|:---:|-----|:---:|:-:|
+| Output the lyrics of given song title                                         |        |     |     | [X] |   |
+| Error tolerance in title name                                                 |        |     |     | [X] |   |
+| Only display the text surrounding a specific keyword                          |        |     | [X] |     |   |
+| Search the lyrics elsewhere on 404                                            | [X]    |     |     |     |   |
 
 Error tolerance examples
 ### case _0_: *yeah, the song title is..*
