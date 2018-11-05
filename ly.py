@@ -1,24 +1,26 @@
 import sys
+import re
 import urllib.request
 import urllib.parse
 from bs4 import BeautifulSoup,SoupStrainer
 
-def get_lyrics(url):
-	print(url)
+lookup = {
+	'azlyrics.com/lyrics': ('<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->', '<!-- MxM banner -->', 4096),
+	'azlyrics.com.az/lyrics': ('<!-- Azlyrics.com.az - Top Post -->\n</div>','<!-- WP QUADS Content Ad Plugin v. 1.8.1 -->', 1024)
+}
+
+def get_lyrics(url_info):
 	try:
+		url, info = url_info
 		response = urllib.request.urlopen(url).read()
 		soup = BeautifulSoup(response, 'html.parser')
 		l = str(soup)
-		
-		# lyrics lies between 'l_start' and '<!-- MxM banner -->'
-		l_start = '<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->'
-
-		# Move away 4096 bytes as lyrics start far down the page aroud 6000+ bytes on average.
-		start = l.find(l_start,4096, len(l))
-		end = l.find('<!-- MxM banner -->', start+len(l_start))
+		# Moves away arbitrary bytes as lyrics start far down the page.
+		start = l.find(info[0],info[2], len(l))
+		end = l.find(info[1], start+len(info[0]))
 		
 		if start > 0 and end > 0:
-			lyrics = '\n' + soup.title.string.split('Lyrics', 1)[0] + '\n' + l[start + len(l_start):end]
+			lyrics = '\n' + re.sub('(\|\sAZ\w.*)|(AZ\w.*\|\s?)', '',soup.title.string) + '\n' + l[start + len(info[0]):end]
 			return BeautifulSoup(lyrics, 'html.parser').get_text()
 		return 'No results found.'
 	except:
@@ -35,15 +37,16 @@ if __name__ == '__main__':
 			results = soup.find_all('a', limit=7)
 			
 			# get the recontructed 'https://www.azlyrics.com*' url if available.
-			url = None
+			url_info = None
 			for tag in results:
 				parsed = urllib.parse.urlparse(tag['href'])
 				temp = urllib.parse.parse_qs(parsed.query)['uddg'][0]
-				if temp.startswith('https://www.azlyrics.com/lyrics'):
-					url = temp
+				match = re.search('azlyrics..*\/lyrics',temp)
+				if match:
+					url_info = temp, lookup[match.group()]
 					break
-			if url:
-				print(get_lyrics(url))
+			if url_info:
+				print(get_lyrics(url_info))
 			else:
 				print('Sorry, No fast results found!\n', file=sys.stderr)
 	except:
