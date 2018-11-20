@@ -69,9 +69,8 @@ if __name__ == '__main__':
 				temp = urllib.parse.parse_qs(parsed.query)['uddg'][0]
 				match = re.search('azlyrics..*\/lyrics',temp)
 				if match:
-						url_info = temp, lookup[match.group()]
-
-						break
+					url_info = temp, lookup[match.group()]
+					break
 
 			if url_info:
 				print(get_lyrics(url_info))
