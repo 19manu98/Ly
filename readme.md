@@ -25,15 +25,16 @@ $ python3 /path/to/ly.py song title goes here
 
 ## Features
 
-`NS`: Not Started,`S`: Started, `W`: Works(partially)/Workaround, `WAA`: Works As Intended, `B`: Broken, `A`: Assignee.
+`NS`: Not Started,`S`: Started, `W`: Works(partially)/Workaround, `WAA`: Works As Intended, `B`: Broken/Bug, `A`: Assignee.
 
-| Name                                                 | NS | S   | W   | WAI | B | A                                        |
-|:-----------------------------------------------------|:--:|:---:|-----|:---:|:-:|------------------------------------------|
-| Output the lyrics of given song title                |    |     |     | [X] |   |                                          |
-| Error tolerance in title name                        |    |     |     | [X] |   |                                          |
-| Only display the text surrounding a specific keyword |    |     | [X] |     |   |                                          |
-| Search the lyrics elsewhere on 404                   |    |     | [X] |     |   |                                          |
-| Log indexed urls to a file, e.g /tmp/ly/log/fail.log |    | [X] |     |     |   | [@19manu98](https://github.com/19manu98) |
+| Name                                                    | NS | S   | W   | WAI | B   | A                                        |
+|:--------------------------------------------------------|:--:|:---:|-----|:---:|:---:|------------------------------------------|
+| Output the lyrics of given song title                   |    |     |     | [X] |     |                                          |
+| Error tolerance in title name                           |    |     |     | [X] |     |                                          |
+| Only display the text surrounding a specific keyword    |    |     | [X] |     |     |                                          |
+| Search the lyrics elsewhere on 404                      |    |     | [X] |     |     |                                          |
+| Catches false positives when the song title is giberish |    |     |     |     | [X] |                                          |
+| Log indexed urls to a file, e.g /tmp/ly/log/fail.log    |    | [X] |     |     |     | [@19manu98](https://github.com/19manu98) |
 
 
 
