@@ -2,8 +2,9 @@
 
 A program that returns the lyrics to the given song title.
 
-## Dependencies 
-### IMPORTANT: If you don't have these dependencies, install them first. else, continue to [Usage](#Usage).
+## Dependencies (IMPORTANT)
+
+If you don't have these dependencies, install them first. else, continue to [Usage](#Usage).
 
 [python3.x.x](https://www.python.org/downloads/)
 
@@ -25,7 +26,7 @@ $ python3 /path/to/ly.py song title goes here
 
 ## Features
 
-`NS`: Not Started,`S`: Started, `W`: Works(partially)/Workaround, `WAA`: Works As Intended, `B`: Broken/Bug, `A`: Assignee.
+`NS`: Not Started,`S`: Started, `W`: Works(partially)/Workaround, `WAI`: Works As Intended, `B`: Broken/Bug, `A`: Assignee.
 
 | Name                                                    | NS | S   | W   | WAI | B   | A                                        |
 |:--------------------------------------------------------|:--:|:---:|-----|:---:|:---:|------------------------------------------|
@@ -79,7 +80,7 @@ etc.
 
 ## Tips
 
-Create [a function](https://github.com/tati-z/.dotfiles/blob/62bf7c304d4655e0d0886e3c126e0975b18a1664/.alias#L54 "simply change to corresponding path") that pipes the output of `ly.py` to Unix's `less` command to extend its features. 👻
+Create [a function](https://github.com/tati-z/.dotfiles/blob/577c4d310f86aea17908ec4c01372a456345b5f6/.alias#L54 "change to correct path") that pipes the output of `ly.py` to Unix's `less` command to extend its features. 👻
 ### Result
 
 ```bash
