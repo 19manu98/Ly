@@ -1,29 +1,14 @@
 import sys
 import re
+import logging
 import urllib.request
 import urllib.parse
 from bs4 import BeautifulSoup,SoupStrainer
-import logging
-
-FORMAT = '%(asctime)-15s %(message)s'
-formatter = logging.Formatter(FORMAT)
 
 lookup = {
 	'azlyrics.com/lyrics': ('<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->', '<!-- MxM banner -->', 4096),
 	'azlyrics.com.az/lyrics': ('<!-- Azlyrics.com.az - Top Post -->\n</div>','<!-- WP QUADS Content Ad Plugin v. 1.8.1 -->', 1024)
 }
-
-def set_logger(name, log_file ):
-
-	handler = logging.FileHandler(log_file)
-	handler.setFormatter(formatter)
-
-	logger = logging.getLogger(name)
-	logger.setLevel('INFO')
-	logger.addHandler(handler)
-
-	return logger
-
 
 def get_lyrics(url_info):
 	try:
@@ -42,31 +27,28 @@ def get_lyrics(url_info):
 	except:
 		raise
 
-def writeGood(name,logger):
-    logger.info("this is the song: %s",name)
-
-def writeBad(name,logger):
-	logger.info("these are the links:")
-	i=0
-	for e in name:
-		i = i+1
-		logger.info("%d: %s"%(i,e))
-
 if __name__ == '__main__':
 	try:
 		if len(sys.argv) < 2:
 			print('Usage: '+ sys.argv[0]+' song title', file= sys.stderr)
 		else:
+			# initialise loggin configs, note: only the latest lyric's log is saved as mode = 'w'
+			logging.basicConfig(level=logging.DEBUG,
+					format='%(asctime)s %(levelname)-8s\n\n%(message)s\n',
+					datefmt='%a, %d %b %Y %H:%M:%S',
+					filename='/tmp/ly.log', filemode='w')
+
 			# get the first 7 links from DuckDuckGo search engine.
 			res = urllib.request.urlopen('https://duckduckgo.com/html/?q='+'+'.join(sys.argv[1:])+'+lyrics azlyrics').read()
 			soup = BeautifulSoup(res,'html.parser', parse_only=SoupStrainer('a',{'class': 'result__snippet'}))
 			results = soup.find_all('a', limit=7)
-
+			visited = []
 			# get the recontructed 'https://www.azlyrics.com*' url if available.
 			url_info = None
 			for tag in results:
 				parsed = urllib.parse.urlparse(tag['href'])
 				temp = urllib.parse.parse_qs(parsed.query)['uddg'][0]
+				visited.append(temp) # appending visited url for logging
 				match = re.search('azlyrics..*\/lyrics',temp)
 				if match:
 					url_info = temp, lookup[match.group()]
@@ -74,11 +56,9 @@ if __name__ == '__main__':
 
 			if url_info:
 				print(get_lyrics(url_info))
-				loggerG = set_logger('fistLogger','FileSearch.log')
-				writeGood(sys.argv[1:],loggerG)
+				logging.info(visited.pop()) # log the success url
 			else:
 				print('Sorry, No fast results found!\n', file=sys.stderr)
-				loggerB =set_logger('secondLogger','Error.log')
-				writeBad(results,loggerB)
+				logging.debug('\n'.join(visited)) # log all urls visited, max 7 (see results above)
 	except:
 	        raise
