@@ -5,7 +5,7 @@ import urllib.request
 import urllib.parse
 from bs4 import BeautifulSoup,SoupStrainer
 
-lookup = {
+URLS = {
 	'azlyrics.com/lyrics': ('<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->', '<!-- MxM banner -->', 4096),
 	'azlyrics.com.az/lyrics': ('<!-- Azlyrics.com.az - Top Post -->\n</div>','<!-- WP QUADS Content Ad Plugin v. 1.8.1 -->', 1024)
 }
@@ -23,7 +23,7 @@ def get_lyrics(url_info):
 		if start > 0 and end > 0:
 			lyrics = '\n' + re.sub('(\|\sAZ\w.*)|(AZ\w.*\|\s?)', '',soup.title.string) + '\n' + l[start + len(info[0]):end]
 			return BeautifulSoup(lyrics, 'html.parser').get_text()
-		return 'No results found.'
+		return None
 	except:
 		raise
 
@@ -51,14 +51,20 @@ if __name__ == '__main__':
 				visited.append(temp) # appending visited url for logging
 				match = re.search('azlyrics..*\/lyrics',temp)
 				if match:
-					url_info = temp, lookup[match.group()]
+					url_info = temp, URLS[match.group()]
 					break
 
 			if url_info:
-				print(get_lyrics(url_info))
-				logging.info(visited.pop()) # log the success url
+				lyrics = get_lyrics(url_info)
+				if lyrics:
+					print(lyrics)
+					logging.info(visited.pop()) # log the success url
+					exit(0)
+				else:
+					logging.debug('\n'.join(visited)) # log all urls visited, max 7 (see results above)
+					exit(1)
 			else:
-				print('Sorry, No fast results found!\n', file=sys.stderr)
-				logging.debug('\n'.join(visited)) # log all urls visited, max 7 (see results above)
+				logging.error('Sorry, no fast results found\n\n' + '\n'.join(visited));
+				exit(2)
 	except:
-	        raise
+		raise
